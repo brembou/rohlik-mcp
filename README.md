@@ -1,9 +1,19 @@
 # Rohlik MCP Server
 
-A Model Context Protocol (MCP) server that enables AI assistants to interact with Rohlik.cz, the Czech Republic's leading online grocery delivery service. This server provides tools for searching products, managing shopping carts, and accessing shopping lists.
+Enhance your favourite LLM with capabilities to buy groceries.
+
+This is a Model Context Protocol (MCP) server that enables AI assistants to interact with Rohlik.cz, the Czech Republic's leading online grocery delivery service. This server provides tools for searching products, managing shopping carts, and accessing shopping lists.
+
+The following prompts work very well with the Rohlik MCP:
+- *Add ingredients for apple pie to the cart. Only gluten-free and with good price.*
+- *Or actually, instead of apple pie I want to make pumpkin pie. Change the ingredients.*
+- *What are the items in my cart?*
+- *Add the items in the attached shopping list photo to the cart.*
+- *Add the bread I marked as favorite in Rohlik to my cart.*
+- *What are the cheapest delivery slots for tomorrow?*
 
 > [!WARNING]
-> This MCP server is made by reverse engineering Rohlik.cz API that is used by the rohlik.cz website. Use this at your own risk.
+> This MCP server is made by reverse engineering Rohlik.cz API that is used by the rohlik.cz website.
 
 ## Usage
 
