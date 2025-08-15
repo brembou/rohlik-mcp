@@ -32,12 +32,22 @@ Add this to your Claude Desktop configuration:
 
 ## Tools
 
+### Core Shopping
 - `search_products` - Search for grocery products by name with filtering options
 - `add_to_cart` - Add multiple products to your shopping cart
 - `get_cart_content` - View current cart contents and totals
 - `remove_from_cart` - Remove items from your shopping cart
 - `get_shopping_list` - Retrieve shopping lists by ID
+
+### Getting info
 - `get_account_data` - Get comprehensive account information including delivery details, orders, announcements, cart, and premium status
+- `get_order_history` - View your past delivered orders with details
+- `get_upcoming_orders` - See your scheduled upcoming orders
+- `get_delivery_info` - Get current delivery information and fees
+- `get_delivery_slots` - View available delivery time slots for your address
+- `get_premium_info` - Check your Rohlik Premium subscription status and benefits
+- `get_announcements` - View current announcements and notifications
+- `get_reusable_bags_info` - Track your reusable bags and environmental impact
 
 ## Development
 
