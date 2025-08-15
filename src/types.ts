@@ -45,3 +45,18 @@ export interface RohlikAPIResponse<T = any> {
   data?: T;
   messages?: Array<{ content: string }>;
 }
+
+export interface AccountData {
+  login?: any;
+  delivery?: any;
+  next_order?: any;
+  announcements?: any;
+  bags?: any;
+  timeslot?: any;
+  last_order?: any;
+  premium_profile?: any;
+  next_delivery_slot?: any;
+  delivery_announcements?: any;
+  delivered_orders?: any;
+  cart?: CartContent;
+}

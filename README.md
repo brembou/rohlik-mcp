@@ -37,6 +37,7 @@ Add this to your Claude Desktop configuration:
 - `get_cart_content` - View current cart contents and totals
 - `remove_from_cart` - Remove items from your shopping cart
 - `get_shopping_list` - Retrieve shopping lists by ID
+- `get_account_data` - Get comprehensive account information including delivery details, orders, announcements, cart, and premium status
 
 ## Development
 

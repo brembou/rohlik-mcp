@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import { Product, SearchResult, CartContent, RohlikCredentials, RohlikAPIResponse } from './types.js';
+import { Product, SearchResult, CartContent, RohlikCredentials, RohlikAPIResponse, AccountData } from './types.js';
 
 const BASE_URL = 'https://www.rohlik.cz';
 
@@ -211,6 +211,80 @@ export class RohlikAPI {
         name: listData?.name || 'Unknown List',
         products: listData?.products || []
       };
+    } finally {
+      await this.logout();
+    }
+  }
+
+  async getAccountData(): Promise<AccountData> {
+    await this.login();
+
+    try {
+      const result: AccountData = {};
+      
+      // Define endpoints similar to the Python implementation
+      const endpoints = {
+        delivery: '/services/frontend-service/first-delivery?reasonableDeliveryTime=true',
+        next_order: '/api/v3/orders/upcoming',
+        announcements: '/services/frontend-service/announcements/top',
+        bags: '/api/v1/reusable-bags/user-info',
+        timeslot: '/services/frontend-service/v1/timeslot-reservation',
+        last_order: '/api/v3/orders/delivered?offset=0&limit=1',
+        premium_profile: '/services/frontend-service/premium/profile',
+        delivery_announcements: '/services/frontend-service/announcements/delivery',
+        delivered_orders: '/api/v3/orders/delivered?offset=0&limit=50'
+      };
+
+      // Fetch data from all endpoints
+      for (const [endpoint, path] of Object.entries(endpoints)) {
+        try {
+          const response = await this.makeRequest<any>(path);
+          (result as any)[endpoint] = response.data || response;
+        } catch (error) {
+          console.error(`Error fetching ${endpoint}:`, error);
+          (result as any)[endpoint] = null;
+        }
+      }
+
+      // Handle next delivery slot endpoint (requires userId and addressId)
+      if (this.userId && this.addressId) {
+        try {
+          const nextDeliveryPath = `/services/frontend-service/timeslots-api/0?userId=${this.userId}&addressId=${this.addressId}&reasonableDeliveryTime=true`;
+          const response = await this.makeRequest<any>(nextDeliveryPath);
+          result.next_delivery_slot = response.data || response;
+        } catch (error) {
+          console.error('Error fetching next_delivery_slot:', error);
+          result.next_delivery_slot = null;
+        }
+      } else {
+        result.next_delivery_slot = null;
+      }
+
+      // Get cart content (call internal method to avoid double login)
+      try {
+        const response = await this.makeRequest<any>('/services/frontend-service/v2/cart');
+        const data = response.data || {};
+
+        result.cart = {
+          total_price: data.totalPrice || 0,
+          total_items: Object.keys(data.items || {}).length,
+          can_make_order: data.submitConditionPassed || false,
+          products: Object.entries(data.items || {}).map(([productId, productData]: [string, any]) => ({
+            id: productId,
+            cart_item_id: productData.orderFieldId || '',
+            name: productData.productName || '',
+            quantity: productData.quantity || 0,
+            price: productData.price || 0,
+            category_name: productData.primaryCategoryName || '',
+            brand: productData.brand || ''
+          }))
+        };
+      } catch (error) {
+        console.error('Error fetching cart:', error);
+        result.cart = undefined;
+      }
+
+      return result;
     } finally {
       await this.logout();
     }
