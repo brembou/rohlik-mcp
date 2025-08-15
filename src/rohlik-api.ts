@@ -289,4 +289,85 @@ export class RohlikAPI {
       await this.logout();
     }
   }
+
+  async getOrderHistory(limit: number = 50): Promise<any> {
+    await this.login();
+
+    try {
+      const response = await this.makeRequest<any>(`/api/v3/orders/delivered?offset=0&limit=${limit}`);
+      return response.data || response;
+    } finally {
+      await this.logout();
+    }
+  }
+
+  async getDeliveryInfo(): Promise<any> {
+    await this.login();
+
+    try {
+      const response = await this.makeRequest<any>('/services/frontend-service/first-delivery?reasonableDeliveryTime=true');
+      return response.data || response;
+    } finally {
+      await this.logout();
+    }
+  }
+
+  async getUpcomingOrders(): Promise<any> {
+    await this.login();
+
+    try {
+      const response = await this.makeRequest<any>('/api/v3/orders/upcoming');
+      return response.data || response;
+    } finally {
+      await this.logout();
+    }
+  }
+
+  async getPremiumInfo(): Promise<any> {
+    await this.login();
+
+    try {
+      const response = await this.makeRequest<any>('/services/frontend-service/premium/profile');
+      return response.data || response;
+    } finally {
+      await this.logout();
+    }
+  }
+
+  async getDeliverySlots(): Promise<any> {
+    await this.login();
+
+    try {
+      if (this.userId && this.addressId) {
+        const response = await this.makeRequest<any>(`/services/frontend-service/timeslots-api/0?userId=${this.userId}&addressId=${this.addressId}&reasonableDeliveryTime=true`);
+        return response.data || response;
+      } else {
+        throw new RohlikAPIError('User ID or Address ID not available');
+      }
+    } finally {
+      await this.logout();
+    }
+  }
+
+  async getAnnouncements(): Promise<any> {
+    await this.login();
+
+    try {
+      const response = await this.makeRequest<any>('/services/frontend-service/announcements/top');
+      return response.data || response;
+    } finally {
+      await this.logout();
+    }
+  }
+
+  async getReusableBagsInfo(): Promise<any> {
+    await this.login();
+
+    try {
+      const response = await this.makeRequest<any>('/api/v1/reusable-bags/user-info');
+      return response.data || response;
+    } finally {
+      await this.logout();
+    }
+  }
 }

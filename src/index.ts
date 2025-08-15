@@ -7,6 +7,13 @@ import { createSearchProductsTool } from "./tools/search-products.js";
 import { createCartManagementTools } from "./tools/cart-management.js";
 import { createShoppingListsTool } from "./tools/shopping-lists.js";
 import { createAccountDataTool } from "./tools/account-data.js";
+import { createOrderHistoryTool } from "./tools/order-history.js";
+import { createDeliveryInfoTool } from "./tools/delivery-info.js";
+import { createUpcomingOrdersTool } from "./tools/upcoming-orders.js";
+import { createPremiumInfoTool } from "./tools/premium-info.js";
+import { createDeliverySlotsTool } from "./tools/delivery-slots.js";
+import { createAnnouncementsTool } from "./tools/announcements.js";
+import { createReusableBagsTool } from "./tools/reusable-bags.js";
 
 const server = new McpServer(
   {
@@ -41,13 +48,34 @@ const searchProducts = createSearchProductsTool(createRohlikAPI);
 const cartTools = createCartManagementTools(createRohlikAPI);
 const shoppingLists = createShoppingListsTool(createRohlikAPI);
 const accountData = createAccountDataTool(createRohlikAPI);
+const orderHistory = createOrderHistoryTool(createRohlikAPI);
+const deliveryInfo = createDeliveryInfoTool(createRohlikAPI);
+const upcomingOrders = createUpcomingOrdersTool(createRohlikAPI);
+const premiumInfo = createPremiumInfoTool(createRohlikAPI);
+const deliverySlots = createDeliverySlotsTool(createRohlikAPI);
+const announcements = createAnnouncementsTool(createRohlikAPI);
+const reusableBags = createReusableBagsTool(createRohlikAPI);
 
+// Core functionality
 server.registerTool(searchProducts.name, searchProducts.definition, searchProducts.handler);
 server.registerTool(cartTools.addToCart.name, cartTools.addToCart.definition, cartTools.addToCart.handler);
 server.registerTool(cartTools.getCartContent.name, cartTools.getCartContent.definition, cartTools.getCartContent.handler);
 server.registerTool(cartTools.removeFromCart.name, cartTools.removeFromCart.definition, cartTools.removeFromCart.handler);
 server.registerTool(shoppingLists.name, shoppingLists.definition, shoppingLists.handler);
 server.registerTool(accountData.name, accountData.definition, accountData.handler);
+
+// Order management
+server.registerTool(orderHistory.name, orderHistory.definition, orderHistory.handler);
+server.registerTool(upcomingOrders.name, upcomingOrders.definition, upcomingOrders.handler);
+
+// Delivery management
+server.registerTool(deliveryInfo.name, deliveryInfo.definition, deliveryInfo.handler);
+server.registerTool(deliverySlots.name, deliverySlots.definition, deliverySlots.handler);
+
+// Account features
+server.registerTool(premiumInfo.name, premiumInfo.definition, premiumInfo.handler);
+server.registerTool(announcements.name, announcements.definition, announcements.handler);
+server.registerTool(reusableBags.name, reusableBags.definition, reusableBags.handler);
 
 async function main() {
   const transport = new StdioServerTransport();
