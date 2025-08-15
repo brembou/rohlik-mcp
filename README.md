@@ -1,10 +1,10 @@
 # Rohlik MCP Server
 
-Enhance your favourite LLM with capabilities to buy groceries.
+**Enhance your favourite LLM with capabilities to buy groceries.**
 
-This is a Model Context Protocol (MCP) server that enables AI assistants to interact with Rohlik.cz, the Czech Republic's leading online grocery delivery service. This server provides tools for searching products, managing shopping carts, and accessing shopping lists.
+This is a Model Context Protocol (MCP) server that enables AI assistants to interact with [Rohlik.cz](https://www.rohlik.cz/), the Czech leading online grocery delivery service. This server provides tools for searching products, managing shopping carts, and accessing account info.
 
-The following prompts work very well with the Rohlik MCP:
+Example prompts LLM that work very well with the Rohlik MCP:
 - *Add ingredients for apple pie to the cart. Only gluten-free and with good price.*
 - *Or actually, instead of apple pie I want to make pumpkin pie. Change the ingredients.*
 - *What are the items in my cart?*
@@ -19,11 +19,11 @@ The following prompts work very well with the Rohlik MCP:
 
 ### Claude Desktop Configuration
 
-On MacOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+Add the MCP to Claude Desktop configuration:
+- On MacOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- On Windows: `%APPDATA%/Claude/claude_desktop_config.json`
 
-On Windows: `%APPDATA%/Claude/claude_desktop_config.json`
-
-Add this to your Claude Desktop configuration:
+Add the following configuration:
 
 ```json
 {
