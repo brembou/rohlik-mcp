@@ -88,7 +88,7 @@ In the Inspector, set the ROHLIK_USERNAME and ROHLIK_PASSWORD envs.
 ### Publishing as NPM package
 
 1. Update version in package.json
-2. `npm version patch && npm publish`
+2. `npm publish`
 
 ## License
 
