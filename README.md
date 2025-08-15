@@ -2,7 +2,8 @@
 
 A Model Context Protocol (MCP) server that enables AI assistants to interact with Rohlik.cz, the Czech Republic's leading online grocery delivery service. This server provides tools for searching products, managing shopping carts, and accessing shopping lists.
 
-Warning: This MCP server uses unofficial reverse engineered Rohlik API.
+> [!WARNING]
+> This MCP server is made by reverse engineering Rohlik.cz API that is used by the rohlik.cz website. Use this at your own risk.
 
 ## Usage
 
@@ -92,3 +93,7 @@ In the Inspector, set the ROHLIK_USERNAME and ROHLIK_PASSWORD envs.
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Acknowledgements
+
+- https://github.com/dvejsada/HA-RohlikCZ for reverse engineering the Rohlik.cz API
