@@ -1,6 +1,6 @@
 {
-  "name": "rohlik-mcp",
-  "version": "1.0.0",
+  "name": "@tomaspavlin/rohlik-mcp",
+  "version": "1.0.2",
   "description": "MCP server for controlling Rohlik.cz grocery shopping website",
   "main": "dist/index.js",
   "type": "module",
@@ -20,6 +20,19 @@
   ],
   "author": "Tomas Pavlin",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tomaspavlin/rohlik-mcp.git"
+  },
+  "homepage": "https://github.com/tomaspavlin/rohlik-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/tomaspavlin/rohlik-mcp/issues"
+  },
+  "files": [
+    "dist/**/*",
+    "README.md",
+    "LICENSE"
+  ],
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
     "node-fetch": "^3.3.2",
