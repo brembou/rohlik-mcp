@@ -1,16 +1,8 @@
 {
   "name": "@tomaspavlin/rohlik-mcp",
-  "version": "1.0.2",
-  "description": "MCP server for controlling Rohlik.cz grocery shopping website",
-  "main": "dist/index.js",
+  "version": "1.0.5",
   "type": "module",
-  "scripts": {
-    "build": "tsc && chmod +x dist/*.js",
-    "start": "node dist/index.js",
-    "inspect": "npm run build && npx @modelcontextprotocol/inspector -e ROHLIK_USERNAME=your-email@example.com -e ROHLIK_PASSWORD=your-password node dist/index.js",
-    "watch": "tsc --watch",
-    "prepublishOnly": "npm run build"
-  },
+  "description": "MCP server for controlling Rohlik.cz grocery shopping website",
   "keywords": [
     "mcp",
     "rohlik",
@@ -20,19 +12,31 @@
   ],
   "author": "Tomas Pavlin",
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/tomaspavlin/rohlik-mcp.git"
-  },
-  "homepage": "https://github.com/tomaspavlin/rohlik-mcp#readme",
-  "bugs": {
-    "url": "https://github.com/tomaspavlin/rohlik-mcp/issues"
-  },
+  "main": "dist/index.js",
+  "bin": "dist/index.js",
   "files": [
-    "dist/**/*",
+    "dist",
     "README.md",
     "LICENSE"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tomaspavlin/rohlik-mcp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/tomaspavlin/rohlik-mcp/issues"
+  },
+  "homepage": "https://github.com/tomaspavlin/rohlik-mcp#readme",
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "scripts": {
+    "build": "tsc && chmod +x dist/*.js",
+    "start": "node dist/index.js",
+    "inspect": "npm run build && npx @modelcontextprotocol/inspector node dist/index.js",
+    "watch": "tsc --watch",
+    "prepublishOnly": "npm run build"
+  },
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
     "node-fetch": "^3.3.2",
@@ -41,8 +45,5 @@
   "devDependencies": {
     "@types/node": "^20.10.0",
     "typescript": "^5.3.0"
-  },
-  "bin": {
-    "rohlik-mcp": "dist/index.js"
   }
 }
