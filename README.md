@@ -1,4 +1,4 @@
-# Rohlik MCP Server
+# <img src="https://www.rohlik.cz/favicon/cz/favicon.ico" alt="Rohlik" width="48" height="48">Rohlik MCP Server
 
 **Enhance your favourite LLM with capabilities to buy groceries.**
 
