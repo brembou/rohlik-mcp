@@ -5,13 +5,13 @@
 This is a Model Context Protocol (MCP) server that enables AI assistants to interact with the Rohlik Group's online grocery delivery services across multiple countries. This server provides tools for searching products, managing shopping carts, and accessing account info.
 
 **Supported Services:**
-- 🇨🇿 **Rohlik.cz** - Czech Republic
-- 🇩🇪 **Knuspr.de** - Germany  
-- 🇦🇹 **Gurkerl.at** - Austria
-- 🇭🇺 **Kifli.hu** - Hungary
-- 🇷🇴 **Sezamo.ro** - Romania
-- 🇮🇹 **Sezamo.it** - Italy (planned)
-- 🇪🇸 **Sezamo.es** - Spain (planned)
+- 🇨🇿 **[Rohlik.cz](https://www.rohlik.cz)** - Czech Republic
+- 🇩🇪 **[Knuspr.de](https://www.knuspr.de)** - Germany  
+- 🇦🇹 **[Gurkerl.at](https://www.gurkerl.at)** - Austria
+- 🇭🇺 **[Kifli.hu](https://www.kifli.hu)** - Hungary
+- 🇷🇴 **[Sezamo.ro](https://www.sezamo.ro)** - Romania
+- 🇮🇹 **[Sezamo.it](https://www.sezamo.it)** - Italy (planned)
+- 🇪🇸 **[Sezamo.es](https://www.sezamo.es)** - Spain (planned)
 
 Example LLM prompts that work very well with the Rohlik MCP:
 - *Add ingredients for apple pie to the cart. Only gluten-free and budget-friendly.*
