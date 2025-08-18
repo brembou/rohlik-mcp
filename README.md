@@ -2,7 +2,16 @@
 
 **Enhance your favourite LLM with capabilities to buy groceries.**
 
-This is a Model Context Protocol (MCP) server that enables AI assistants to interact with [Rohlik.cz](https://www.rohlik.cz/), the Czech leading online grocery delivery service. This server provides tools for searching products, managing shopping carts, and accessing account info.
+This is a Model Context Protocol (MCP) server that enables AI assistants to interact with the Rohlik Group's online grocery delivery services across multiple countries. This server provides tools for searching products, managing shopping carts, and accessing account info.
+
+**Supported Services:**
+- 🇨🇿 **Rohlik.cz** - Czech Republic
+- 🇩🇪 **Knuspr.de** - Germany  
+- 🇦🇹 **Gurkerl.at** - Austria
+- 🇭🇺 **Kifli.hu** - Hungary
+- 🇷🇴 **Sezamo.ro** - Romania
+- 🇮🇹 **Sezamo.it** - Italy (planned)
+- 🇪🇸 **Sezamo.es** - Spain (planned)
 
 Example LLM prompts that work very well with the Rohlik MCP:
 - *Add ingredients for apple pie to the cart. Only gluten-free and budget-friendly.*
@@ -13,7 +22,7 @@ Example LLM prompts that work very well with the Rohlik MCP:
 - *What are the cheapest delivery slots for tomorrow?*
 
 > [!WARNING]
-> This MCP server is made by reverse engineering Rohlik.cz API that is used by the rohlik.cz website.
+> This MCP server is made by reverse engineering the APIs used by Rohlik Group's websites. Use at your own discretion.
 
 ## Usage
 
@@ -33,12 +42,27 @@ Add the following configuration:
       "args": ["-y", "@tomaspavlin/rohlik-mcp"],
       "env": {
         "ROHLIK_USERNAME": "your-email@example.com",
-        "ROHLIK_PASSWORD": "your-password"
+        "ROHLIK_PASSWORD": "your-password",
+        "ROHLIK_BASE_URL": "https://www.rohlik.cz"
       }
     }
   }
 }
 ```
+
+### Supported Regions
+
+The server supports multiple Rohlik regions by setting the `ROHLIK_BASE_URL` environment variable:
+
+* **Czech Republic**: `https://www.rohlik.cz` (default)
+* **Germany**: `https://www.knuspr.de`
+* **Austria**: `https://www.gurkerl.at`
+* **Hungary**: `https://www.kifli.hu`
+* **Romania**: `https://www.sezamo.ro`
+* **Italy** (planned): `https://www.sezamo.it`
+* **Spain** (planned): `https://www.sezamo.es`
+
+If `ROHLIK_BASE_URL` is not specified, it defaults to the Czech version.
 
 ## Tools
 
@@ -89,7 +113,8 @@ Add this to configuration:
       "args": ["/path/to/rohlik-mcp/dist/index.js"],
       "env": {
         "ROHLIK_USERNAME": "your-email@example.com",
-        "ROHLIK_PASSWORD": "your-password"
+        "ROHLIK_PASSWORD": "your-password",
+        "ROHLIK_BASE_URL": "https://www.rohlik.cz"
       }
     }
   }
