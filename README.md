@@ -5,7 +5,7 @@
 This is a Model Context Protocol (MCP) server that enables AI assistants to interact with [Rohlik.cz](https://www.rohlik.cz/), the Czech leading online grocery delivery service. This server provides tools for searching products, managing shopping carts, and accessing account info.
 
 Example LLM prompts that work very well with the Rohlik MCP:
-- *Add ingredients for apple pie to the cart. Only gluten-free and with good price.*
+- *Add ingredients for apple pie to the cart. Only gluten-free and budget-friendly.*
 - *Or actually, instead of apple pie I want to make pumpkin pie. Change the ingredients.*
 - *What are the items in my cart?*
 - *Add the items in the attached shopping list photo to the cart.*
