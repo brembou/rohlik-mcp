@@ -2,6 +2,9 @@
 
 **Enhance your favourite LLM with capabilities to buy groceries.**
 
+> [!WARNING]
+> This MCP server is made for study purposes with use of reverse engineered Rohlik API. It is for personal use only.
+
 This is a Model Context Protocol (MCP) server that enables AI assistants to interact with the Rohlik Group's online grocery delivery services across multiple countries. This server provides tools for searching products, managing shopping carts, and accessing account info.
 
 **Supported Services:**
@@ -20,9 +23,6 @@ Example LLM prompts that work very well with the Rohlik MCP:
 - *Add the items in the attached shopping list photo to the cart.*
 - *Add the bread I marked as favorite in Rohlik to my cart.*
 - *What are the cheapest delivery slots for tomorrow?*
-
-> [!WARNING]
-> This MCP server is made for study purposes with use of reverse engineered Rohlik API. It is for personal use only.
 
 ## Usage
 
