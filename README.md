@@ -22,7 +22,7 @@ Example LLM prompts that work very well with the Rohlik MCP:
 - *What are the cheapest delivery slots for tomorrow?*
 
 > [!WARNING]
-> This MCP server is made by reverse engineering the APIs used by Rohlik Group's websites. Use at your own discretion.
+> This MCP server is made for study purposes with use of reverse engineered Rohlik API. It is for personal use only.
 
 ## Usage
 
