@@ -15,15 +15,32 @@ export class RohlikAPI {
   private userId?: number;
   private addressId?: number;
   private sessionCookies: string = '';
+  private lastRequestTime: number = 0;
+  private readonly minRequestInterval: number = 100; // Minimum 100ms between requests
 
   constructor(credentials: RohlikCredentials) {
     this.credentials = credentials;
+  }
+
+  private async rateLimit(): Promise<void> {
+    const now = Date.now();
+    const timeSinceLastRequest = now - this.lastRequestTime;
+
+    if (timeSinceLastRequest < this.minRequestInterval) {
+      const delay = this.minRequestInterval - timeSinceLastRequest;
+      await new Promise(resolve => setTimeout(resolve, delay));
+    }
+
+    this.lastRequestTime = Date.now();
   }
 
   private async makeRequest<T>(
     url: string,
     options: Partial<Parameters<typeof fetch>[1]> = {}
   ): Promise<RohlikAPIResponse<T>> {
+    // Apply rate limiting to prevent HTTP 429 errors
+    await this.rateLimit();
+
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',
       'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36',
