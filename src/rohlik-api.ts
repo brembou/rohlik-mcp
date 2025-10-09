@@ -56,20 +56,73 @@ export class RohlikAPI {
       name: ''
     };
 
-    const response = await this.makeRequest<any>('/services/frontend-service/login', {
-      method: 'POST',
-      body: JSON.stringify(loginData)
-    });
+    const debug = process.env.ROHLIK_DEBUG === 'true';
 
-    if (response.status !== 200) {
-      if (response.status === 401) {
-        throw new RohlikAPIError('Invalid credentials', 401);
+    try {
+      const response = await this.makeRequest<any>('/services/frontend-service/login', {
+        method: 'POST',
+        body: JSON.stringify(loginData)
+      });
+
+      if (debug) {
+        console.error('[ROHLIK_DEBUG] Login response:', JSON.stringify(response, null, 2));
       }
-      throw new RohlikAPIError(`Login failed: ${response.messages?.[0]?.content || 'Unknown error'}`);
-    }
 
-    this.userId = response.data?.user?.id;
-    this.addressId = response.data?.address?.id;
+      // Check for various error response formats
+      // Accept both 200 (OK) and 202 (Accepted) as successful responses
+      const isSuccess = response.status === 200 || response.status === 202 || response.status === undefined;
+
+      if (!isSuccess) {
+        if (response.status === 401 || response.status === 403) {
+          throw new RohlikAPIError('Invalid credentials - please check your username and password', response.status);
+        }
+
+        // Try to extract error message from various possible locations
+        const responseAny = response as any;
+        const errorMessage =
+          response.messages?.[0]?.content ||
+          responseAny.message ||
+          responseAny.error ||
+          `Login failed with status ${response.status}`;
+
+        if (debug) {
+          console.error('[ROHLIK_DEBUG] Login failed:', errorMessage);
+        }
+
+        throw new RohlikAPIError(`Login failed: ${errorMessage}`, response.status);
+      }
+
+      // Verify we have user data
+      if (!response.data?.user?.id) {
+        if (debug) {
+          console.error('[ROHLIK_DEBUG] No user ID in response. Full response:', JSON.stringify(response, null, 2));
+        }
+        throw new RohlikAPIError('Login succeeded but no user data received. Please check credentials and try again.');
+      }
+
+      this.userId = response.data.user.id;
+      this.addressId = response.data?.address?.id;
+
+      if (debug) {
+        console.error(`[ROHLIK_DEBUG] Login successful. User ID: ${this.userId}, Address ID: ${this.addressId}`);
+      }
+    } catch (error) {
+      if (error instanceof RohlikAPIError) {
+        throw error;
+      }
+
+      // Log the full error for debugging
+      if (debug) {
+        console.error('[ROHLIK_DEBUG] Login error:', error);
+      }
+
+      // Handle network or other errors
+      if (error instanceof Error) {
+        throw new RohlikAPIError(`Login failed: ${error.message}`);
+      }
+
+      throw new RohlikAPIError('Login failed: Unknown error occurred');
+    }
   }
 
   async logout(): Promise<void> {
