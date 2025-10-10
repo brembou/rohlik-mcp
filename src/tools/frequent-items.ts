@@ -26,14 +26,14 @@ export function createFrequentItemsTool(createRohlikAPI: () => RohlikAPI) {
       title: "Get Frequent Items",
       description: "Analyze your order history to find the most frequently purchased items",
       inputSchema: {
-        orders_to_analyze: z.number().min(5).max(100).default(20).describe("Number of recent orders to analyze (5-100, default: 20)"),
-        top_items: z.number().min(1).max(50).default(10).describe("Number of top items to return overall (1-50, default: 10)"),
+        orders_to_analyze: z.number().min(1).max(20).default(5).describe("Number of recent orders to analyze (1-20, default: 5)"),
+        top_items: z.number().min(3).max(30).default(10).describe("Number of top items to return overall (3-30, default: 10)"),
         top_per_category: z.number().min(1).max(20).default(10).describe("Number of top items to show per category (1-20, default: 10)"),
         show_categories: z.boolean().default(true).describe("Whether to show per-category breakdown (default: true)")
       }
     },
     handler: async (args: { orders_to_analyze?: number; top_items?: number; top_per_category?: number; show_categories?: boolean }) => {
-      const { orders_to_analyze = 20, top_items = 10, top_per_category = 10, show_categories = true } = args;
+      const { orders_to_analyze = 5, top_items = 10, top_per_category = 10, show_categories = true } = args;
 
       try {
         const api = createRohlikAPI();

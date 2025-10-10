@@ -92,11 +92,11 @@ export function createMealSuggestionsTool(createRohlikAPI: () => RohlikAPI) {
       description: "Get smart shopping suggestions for specific meal types (breakfast, lunch, dinner, etc.) based on your purchase history",
       inputSchema: {
         meal_type: z.enum(["breakfast", "lunch", "dinner", "snack", "baking", "drinks", "healthy"])
-          .describe("Type of meal or occasion: breakfast, lunch, dinner, snack, baking, drinks, or healthy"),
+          .describe("Type of meal or occasion (enum): breakfast, lunch, dinner, snack, baking, drinks, or healthy"),
         items_count: z.number().min(3).max(30).default(10)
           .describe("Number of items to suggest (3-30, default: 10)"),
-        orders_to_analyze: z.number().min(5).max(100).default(20)
-          .describe("Number of recent orders to analyze (5-100, default: 20)"),
+        orders_to_analyze: z.number().min(1).max(20).default(5)
+          .describe("Number of recent orders to analyze (1-20, default: 5)"),
         prefer_frequent: z.boolean().default(true)
           .describe("Prefer items you order frequently (default: true)")
       }
@@ -110,7 +110,7 @@ export function createMealSuggestionsTool(createRohlikAPI: () => RohlikAPI) {
       const {
         meal_type,
         items_count = 10,
-        orders_to_analyze = 20,
+        orders_to_analyze = 5,
         prefer_frequent = true
       } = args;
 
@@ -259,13 +259,7 @@ export function createMealSuggestionsTool(createRohlikAPI: () => RohlikAPI) {
 
 ${prefer_frequent ? '🏆 TOP ITEMS YOU FREQUENTLY ORDER:' : '📦 SUGGESTED ITEMS:'}
 
-${sortedProducts.map(formatItem).join('\n\n')}
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-💡 Tips:
-   • Use "add these items to my cart" to quickly add suggestions
-   • Product IDs can be used with add_to_cart tool
-   • Try different meal types: breakfast, lunch, dinner, snack, baking, drinks, healthy`;
+${sortedProducts.map(formatItem).join('\n\n')}`;
 
         return {
           content: [
