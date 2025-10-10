@@ -18,20 +18,20 @@ This is a Model Context Protocol (MCP) server that enables AI assistants to inte
 
 Example LLM prompts that work very well with the Rohlik MCP:
 
-**🤖 Smart Shopping (NEW!):**
-- *"Add breakfast items I typically order"*
-- *"Show me lunch suggestions for this week"*
-- *"What do I usually buy for dinner?"*
-- *"I need snacks - suggest what I normally order"*
-- *"Show my top 20 most purchased items"*
-- *"What can I do with Rohlik MCP?"* (shows interactive guide)
-
 **🛒 Regular Shopping:**
 - *Add ingredients for apple pie to the cart. Only gluten-free and budget-friendly.*
 - *Or actually, instead of apple pie I want to make pumpkin pie. Change the ingredients.*
 - *What are the items in my cart?*
 - *Add the items in the attached shopping list photo to the cart.*
 - *Add the bread I marked as favorite in Rohlik to my cart.*
+
+**🤖 Smart Shopping:**
+- *"Add breakfast items I typically order"*
+- *"Show me lunch suggestions for this week"*
+- *"What do I usually buy for dinner?"*
+- *"I need snacks - suggest what I normally order"*
+- *"Show my top 20 most purchased items"*
+- *"What can I do with Rohlik MCP?"*
 
 **📅 Planning:**
 - *What are the cheapest delivery slots for tomorrow?*
@@ -41,14 +41,6 @@ Example LLM prompts that work very well with the Rohlik MCP:
 ## 📚 Documentation
 
 **New to Rohlik MCP?** Check out our [Complete Guide for Newcomers](./docs/README.md)!
-
-The guide includes:
-- 🎯 What you can do with examples
-- 🤖 How smart shopping features work
-- 📖 Complete tool reference
-- 💬 Example conversations
-- 💡 Tips & best practices
-- 🔧 Troubleshooting guide
 
 ## Usage
 
@@ -92,17 +84,17 @@ If `ROHLIK_BASE_URL` is not specified, it defaults to the Czech version.
 
 ## Tools
 
-### 🤖 Smart Shopping (NEW!)
-- `get_meal_suggestions` - Get personalized suggestions for breakfast, lunch, dinner, snacks, baking, drinks, or healthy eating based on your order history
-- `get_frequent_items` - Analyze order history to find most frequently purchased items (overall + per category)
-- `get_shopping_scenarios` - Interactive guide showing what you can do with the MCP
-
 ### Core Shopping
 - `search_products` - Search for grocery products by name with filtering options
 - `add_to_cart` - Add multiple products to your shopping cart
 - `get_cart_content` - View current cart contents and totals
 - `remove_from_cart` - Remove items from your shopping cart
 - `get_shopping_list` - Retrieve shopping lists by ID
+
+### 🤖 Smart Shopping
+- `get_meal_suggestions` - Get personalized suggestions for breakfast, lunch, dinner, snacks, baking, drinks, or healthy eating based on your order history
+- `get_frequent_items` - Analyze order history to find most frequently purchased items (overall + per category)
+- `get_shopping_scenarios` - Interactive guide showing what you can do with the MCP
 
 ### Getting info
 - `get_account_data` - Get comprehensive account information including delivery details, orders, announcements, cart, and premium status
