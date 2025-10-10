@@ -15,6 +15,9 @@ import { createDeliverySlotsTool } from "./tools/delivery-slots.js";
 import { createAnnouncementsTool } from "./tools/announcements.js";
 import { createReusableBagsTool } from "./tools/reusable-bags.js";
 import { createOrderDetailTool } from "./tools/order-detail.js";
+import { createFrequentItemsTool } from "./tools/frequent-items.js";
+import { createMealSuggestionsTool } from "./tools/meal-suggestions.js";
+import { createShoppingScenariosTool } from "./tools/shopping-scenarios.js";
 
 const server = new McpServer(
   {
@@ -57,6 +60,9 @@ const deliverySlots = createDeliverySlotsTool(createRohlikAPI);
 const announcements = createAnnouncementsTool(createRohlikAPI);
 const reusableBags = createReusableBagsTool(createRohlikAPI);
 const orderDetail = createOrderDetailTool(createRohlikAPI);
+const frequentItems = createFrequentItemsTool(createRohlikAPI);
+const mealSuggestions = createMealSuggestionsTool(createRohlikAPI);
+const shoppingScenarios = createShoppingScenariosTool();
 
 // Core functionality
 server.registerTool(searchProducts.name, searchProducts.definition, searchProducts.handler);
@@ -79,6 +85,11 @@ server.registerTool(deliverySlots.name, deliverySlots.definition, deliverySlots.
 server.registerTool(premiumInfo.name, premiumInfo.definition, premiumInfo.handler);
 server.registerTool(announcements.name, announcements.definition, announcements.handler);
 server.registerTool(reusableBags.name, reusableBags.definition, reusableBags.handler);
+
+// Smart shopping features
+server.registerTool(frequentItems.name, frequentItems.definition, frequentItems.handler);
+server.registerTool(mealSuggestions.name, mealSuggestions.definition, mealSuggestions.handler);
+server.registerTool(shoppingScenarios.name, shoppingScenarios.definition, shoppingScenarios.handler);
 
 async function main() {
   const transport = new StdioServerTransport();

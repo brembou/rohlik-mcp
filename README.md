@@ -17,12 +17,30 @@ This is a Model Context Protocol (MCP) server that enables AI assistants to inte
 - 🇪🇸 **[Sezamo.es](https://www.sezamo.es)** - Spain (planned)
 
 Example LLM prompts that work very well with the Rohlik MCP:
+
+**🛒 Regular Shopping:**
 - *Add ingredients for apple pie to the cart. Only gluten-free and budget-friendly.*
 - *Or actually, instead of apple pie I want to make pumpkin pie. Change the ingredients.*
 - *What are the items in my cart?*
 - *Add the items in the attached shopping list photo to the cart.*
 - *Add the bread I marked as favorite in Rohlik to my cart.*
+
+**🤖 Smart Shopping:**
+- *"Add breakfast items I typically order"*
+- *"Show me lunch suggestions for this week"*
+- *"What do I usually buy for dinner?"*
+- *"I need snacks - suggest what I normally order"*
+- *"Show my top 20 most purchased items"*
+- *"What can I do with Rohlik MCP?"*
+
+**📅 Planning:**
 - *What are the cheapest delivery slots for tomorrow?*
+- *When is my next delivery?*
+- *Show my last 5 orders*
+
+## 📚 Documentation
+
+**New to Rohlik MCP?** Check out our [Complete Guide for Newcomers](./docs/README.md)!
 
 ## Usage
 
@@ -73,9 +91,15 @@ If `ROHLIK_BASE_URL` is not specified, it defaults to the Czech version.
 - `remove_from_cart` - Remove items from your shopping cart
 - `get_shopping_list` - Retrieve shopping lists by ID
 
+### 🤖 Smart Shopping
+- `get_meal_suggestions` - Get personalized suggestions for breakfast, lunch, dinner, snacks, baking, drinks, or healthy eating based on your order history
+- `get_frequent_items` - Analyze order history to find most frequently purchased items (overall + per category)
+- `get_shopping_scenarios` - Interactive guide showing what you can do with the MCP
+
 ### Getting info
 - `get_account_data` - Get comprehensive account information including delivery details, orders, announcements, cart, and premium status
 - `get_order_history` - View your past delivered orders with details
+- `get_order_detail` - Get detailed information about a specific order including all products
 - `get_upcoming_orders` - See your scheduled upcoming orders
 - `get_delivery_info` - Get current delivery information and fees
 - `get_delivery_slots` - View available delivery time slots for your address
@@ -98,8 +122,35 @@ npm run build
 - `npm start` - Launch the production server
 - `npm run dev` - Start development mode with watch
 - `npm run inspect` - Test with MCP Inspector
+- `npm test` - Run unit tests
+- `npm run test:watch` - Run tests in watch mode
+- `npm run test:coverage` - Generate test coverage report
 
 ## Testing
+
+### Unit Tests
+
+The project includes unit tests for smart shopping data transformation logic:
+
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode (development)
+npm run test:watch
+
+# Generate coverage report
+npm run test:coverage
+```
+
+**What's tested:**
+- Frequency analysis algorithms (`get_frequent_items`)
+- Meal suggestion filtering and ranking (`get_meal_suggestions`)
+- Price averaging and calculations
+- Category filtering and grouping
+- Edge cases (empty data, missing fields, etc.)
+
+See [tests/README.md](./tests/README.md) for detailed testing documentation.
 
 ### Testing with Claude Desktop
 
@@ -121,6 +172,29 @@ Add this to configuration:
 }
 ```
 
+### Debug Mode
+
+If you're experiencing authentication issues, enable debug mode to see detailed logs:
+
+```json
+{
+  "mcpServers": {
+    "rohlik-local": {
+      "command": "node",
+      "args": ["/path/to/rohlik-mcp/dist/index.js"],
+      "env": {
+        "ROHLIK_USERNAME": "your-email@example.com",
+        "ROHLIK_PASSWORD": "your-password",
+        "ROHLIK_BASE_URL": "https://www.rohlik.cz",
+        "ROHLIK_DEBUG": "true"
+      }
+    }
+  }
+}
+```
+
+Debug logs will appear in `~/Library/Logs/Claude/mcp-server-rohlik-local.log` (macOS) or `%APPDATA%/Claude/logs/mcp-server-rohlik-local.log` (Windows).
+
 ### Testing with MCP Inspector
 
 You can test the MCP server using the official MCP Inspector (https://modelcontextprotocol.io/legacy/tools/inspector):
@@ -130,6 +204,114 @@ npm run inspect
 ```
 
 In the Inspector, set the ROHLIK_USERNAME and ROHLIK_PASSWORD envs.
+
+### API Validation Tool
+
+To validate that all Rohlik API endpoints are working correctly and diagnose authentication issues:
+
+```bash
+npm run validate-api
+```
+
+This will:
+- Test all 11 API endpoints used by the MCP server
+- Show detailed HTTP request/response logs in the console
+- Generate a JSON report: `tests/validation-results.json`
+- Generate a beautiful HTML report: `tests/validation-report.html`
+
+The validator automatically loads credentials from your Claude Desktop config or environment variables. Open the HTML report in your browser for an easy-to-read summary of all tests.
+
+## Troubleshooting
+
+### Common Issues
+
+#### "Login failed" Error
+
+**Possible causes:**
+1. Wrong username/password in configuration
+2. Rohlik API changed or is temporarily unavailable
+3. Network connectivity issues
+
+**Solutions:**
+1. Verify credentials in your `claude_desktop_config.json`
+2. Enable debug mode: `"ROHLIK_DEBUG": "true"` in env section
+3. Check logs: `~/Library/Logs/Claude/mcp-server-rohlik*.log` (macOS) or `%APPDATA%\Claude\logs\mcp-server-rohlik*.log` (Windows)
+4. Run API validator: `npm run validate-api` to test all endpoints
+
+#### "No order history found"
+
+**Cause:** Your account has no past orders, or orders are not accessible
+
+**Solution:** Ensure you have at least one completed order on Rohlik before using smart shopping features (`get_meal_suggestions`, `get_frequent_items`)
+
+#### Slow response times
+
+**Causes:**
+- Analyzing too many orders (smart shopping features)
+- Network latency to Rohlik servers
+- API rate limiting
+
+**Solutions:**
+- For smart shopping: reduce number of orders analyzed (try 10 instead of default 20)
+- Use fewer requests or add delays between bulk operations
+- Check your network connection
+
+#### Products not found or search returns no results
+
+**Causes:**
+- Product out of stock or discontinued
+- Product ID changed in Rohlik system
+- Spelling mistake in search query
+
+**Solutions:**
+- Search by partial name instead of full product name
+- Try alternative spellings or broader search terms
+- Verify product exists on Rohlik website directly
+
+### Enabling Debug Mode
+
+Add `ROHLIK_DEBUG` to your configuration to see detailed logs:
+
+```json
+{
+  "mcpServers": {
+    "rohlik-local": {
+      "command": "node",
+      "args": ["/path/to/rohlik-mcp/dist/index.js"],
+      "env": {
+        "ROHLIK_USERNAME": "your-email@example.com",
+        "ROHLIK_PASSWORD": "your-password",
+        "ROHLIK_BASE_URL": "https://www.rohlik.cz",
+        "ROHLIK_DEBUG": "true"
+      }
+    }
+  }
+}
+```
+
+**View logs:**
+```bash
+# macOS
+tail -f ~/Library/Logs/Claude/mcp-server-rohlik-local.log
+
+# Windows
+type %APPDATA%\Claude\logs\mcp-server-rohlik-local.log
+```
+
+### Using the API Validation Tool
+
+If you encounter authentication or API issues, run the validator:
+
+```bash
+npm run validate-api
+```
+
+This will:
+- Test all 11 API endpoints used by the MCP
+- Show detailed HTTP request/response information
+- Generate `validation-results.json` with test results
+- Create `validation-report.html` for easy viewing in browser
+- Help identify which specific endpoints are failing
 
 ### Publishing as NPM package
 
