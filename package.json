@@ -44,8 +44,7 @@
   "dependencies": {
     "@modelcontextprotocol/sdk": "^1.0.0",
     "node-fetch": "^3.3.2",
-    "zod": "^3.22.4",
-    "mcp-handler": "latest"
+    "zod": "^3.22.4"
   },
   "devDependencies": {
     "@types/node": "^20.10.0",

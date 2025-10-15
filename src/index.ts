@@ -1,7 +1,9 @@
 #!/usr/bin/env node
 
 import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+import { SSEServerTransport } from "@modelcontextprotocol/sdk/server/sse.js";
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import express from "express";
 import { RohlikAPI } from "./rohlik-api.js";
 import { createSearchProductsTool } from "./tools/search-products.js";
 import { createCartManagementTools } from "./tools/cart-management.js";
@@ -92,9 +94,67 @@ server.registerTool(mealSuggestions.name, mealSuggestions.definition, mealSugges
 server.registerTool(shoppingScenarios.name, shoppingScenarios.definition, shoppingScenarios.handler);
 
 async function main() {
-  const transport = new StdioServerTransport();
-  await server.connect(transport);
-  console.error("Rohlik MCP server running on stdio");
+  const PORT = parseInt(process.env.PORT || "3000");
+
+  // Pro Railway/cloud použijeme HTTP/SSE transport
+  if (process.env.RAILWAY_ENVIRONMENT || process.env.PORT) {
+    const app = express();
+
+    app.use(express.json());
+
+    app.get("/", (req, res) => {
+      res.json({
+        name: "Rohlik MCP Server",
+        version: "1.0.0",
+        status: "running",
+        endpoints: {
+          health: "/health",
+          sse: "/sse"
+        }
+      });
+    });
+
+    app.get("/health", (req, res) => {
+      res.json({
+        status: "ok",
+        service: "rohlik-mcp",
+        timestamp: new Date().toISOString()
+      });
+    });
+
+    app.get("/sse", async (req, res) => {
+      console.error("New SSE connection established");
+
+      res.writeHead(200, {
+        "Content-Type": "text/event-stream",
+        "Cache-Control": "no-cache",
+        "Connection": "keep-alive",
+      });
+
+      const transport = new SSEServerTransport("/message", res);
+      await server.connect(transport);
+
+      req.on("close", () => {
+        console.error("SSE connection closed");
+      });
+    });
+
+    app.post("/message", async (req, res) => {
+      // SSE message endpoint
+      res.status(200).end();
+    });
+
+    app.listen(PORT, () => {
+      console.error(`🚂 Rohlik MCP server running on port ${PORT}`);
+      console.error(`📡 SSE endpoint: http://localhost:${PORT}/sse`);
+      console.error(`💚 Health check: http://localhost:${PORT}/health`);
+    });
+  } else {
+    // Lokálně používáme stdio transport
+    const transport = new StdioServerTransport();
+    await server.connect(transport);
+    console.error("Rohlik MCP server running on stdio");
+  }
 }
 
 main().catch((error) => {
