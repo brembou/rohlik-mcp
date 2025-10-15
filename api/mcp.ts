@@ -1,6 +1,11 @@
+// api/mcp.ts
 import { z } from "zod";
 import { createMcpHandler } from "mcp-handler";
 
+/**
+ * ZÁKLAD: jeden nástroj "ping", aby šlo ověřit, že endpoint /mcp žije.
+ * Až to poběží, doplníme "rohlíkové" funkce (nákup na Rohlik.cz atd.).
+ */
 const handler = createMcpHandler(
   (server) => {
     server.tool(
@@ -10,7 +15,9 @@ const handler = createMcpHandler(
       async () => ({ content: [{ type: "text", text: "pong" }] })
     );
   },
+  // options – nech prázdné
   {},
+  // basePath – necháme prázdné, routování uděláme ve vercel.json
   { basePath: "" }
 );
 
