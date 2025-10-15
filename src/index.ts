@@ -122,20 +122,10 @@ async function main() {
       });
     });
 
-    app.get("/sse", async (req, res) => {
-      console.error("New SSE connection established");
+    // Nahraďte GET endpoint tímto - podporuje všechny HTTP metody
+    app.all("/sse", async (req, res) => {
+      console.error(`New SSE connection established (${req.method})`);
 
-      // NEPOSÍLEJTE headers ručně - SSEServerTransport to udělá sám!
-      // Zakomentujte nebo smažte tento blok:
-      /*
-      res.writeHead(200, {
-        "Content-Type": "text/event-stream",
-        "Cache-Control": "no-cache",
-        "Connection": "keep-alive",
-      });
-      */
-
-      // SSEServerTransport si nastaví headers sám
       const transport = new SSEServerTransport("/message", res);
       await server.connect(transport);
 
