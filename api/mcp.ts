@@ -3,8 +3,8 @@ import { z } from "zod";
 import { createMcpHandler } from "mcp-handler";
 
 /**
- * ZÁKLAD: jeden nástroj "ping", abychom ověřili, že endpoint /mcp žije.
- * Až to poběží, přidáme skutečné "rohlíkové" nástroje.
+ * ZÁKLAD: jeden nástroj "ping", aby šlo ověřit, že endpoint /mcp žije.
+ * Až to poběží, doplníme "rohlíkové" funkce (nákup na Rohlik.cz atd.).
  */
 const handler = createMcpHandler(
   (server) => {
@@ -12,16 +12,13 @@ const handler = createMcpHandler(
       "ping",
       "Vrátí 'pong' pro otestování, že server běží.",
       z.object({}).strict(),
-      async () => ({
-        content: [{ type: "text", text: "pong" }],
-      })
+      async () => ({ content: [{ type: "text", text: "pong" }] })
     );
   },
-  // options (nech prázdné)
+  // options – nech prázdné
   {},
   // basePath – necháme prázdné, routování uděláme ve vercel.json
   { basePath: "" }
 );
 
-// Vercel potřebuje default export funkce/handleru
 export default handler;
