@@ -1,5 +1,0 @@
-{
-  "routes": [
-    { "src": "/mcp", "dest": "/api/mcp" }
-  ]
-}
