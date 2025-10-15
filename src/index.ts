@@ -93,6 +93,49 @@ server.registerTool(frequentItems.name, frequentItems.definition, frequentItems.
 server.registerTool(mealSuggestions.name, mealSuggestions.definition, mealSuggestions.handler);
 server.registerTool(shoppingScenarios.name, shoppingScenarios.definition, shoppingScenarios.handler);
 
+// Map of all tools for REST API exposure
+const toolsRegistry: Record<string, { name: string; definition: any; handler: (args: any) => Promise<any> }> = {
+  [searchProducts.name]: searchProducts,
+  [cartTools.addToCart.name]: cartTools.addToCart,
+  [cartTools.getCartContent.name]: cartTools.getCartContent,
+  [cartTools.removeFromCart.name]: cartTools.removeFromCart,
+  [shoppingLists.name]: shoppingLists,
+  [accountData.name]: accountData,
+  [orderHistory.name]: orderHistory,
+  [orderDetail.name]: orderDetail,
+  [upcomingOrders.name]: upcomingOrders,
+  [deliveryInfo.name]: deliveryInfo,
+  [deliverySlots.name]: deliverySlots,
+  [premiumInfo.name]: premiumInfo,
+  [announcements.name]: announcements,
+  [reusableBags.name]: reusableBags,
+  [frequentItems.name]: frequentItems,
+  [mealSuggestions.name]: mealSuggestions,
+  [shoppingScenarios.name]: shoppingScenarios,
+};
+
+// Helper to coerce query params to proper types (number/boolean)
+function coerceParams(params: Record<string, any>) {
+  const result: Record<string, any> = {};
+  for (const [key, value] of Object.entries(params)) {
+    if (typeof value !== 'string') {
+      result[key] = value;
+      continue;
+    }
+    const lower = value.toLowerCase();
+    if (lower === 'true') {
+      result[key] = true;
+    } else if (lower === 'false') {
+      result[key] = false;
+    } else if (!isNaN(Number(value)) && value.trim() !== '') {
+      result[key] = Number(value);
+    } else {
+      result[key] = value;
+    }
+  }
+  return result;
+}
+
 async function main() {
   const PORT = parseInt(process.env.PORT || "3000");
 
@@ -109,7 +152,9 @@ async function main() {
         status: "running",
         endpoints: {
           health: "/health",
-          sse: "/sse"
+          sse: "/sse",
+          api: "/api",
+          tools: "/api/tools"
         }
       });
     });
@@ -137,6 +182,53 @@ async function main() {
     app.post("/message", async (req, res) => {
       // SSE message endpoint
       res.status(200).end();
+    });
+
+    // REST API: List available tools
+    app.get("/api/tools", (req, res) => {
+      const tools = Object.values(toolsRegistry).map(t => ({
+        name: t.name,
+        title: t.definition?.title,
+        description: t.definition?.description
+      }));
+      res.json({ tools });
+    });
+
+    // REST API: Execute a tool via REST (supports GET with query or POST with JSON body)
+    app.all("/api/tools/:toolName", async (req, res) => {
+      const toolName = req.params.toolName;
+      const tool = toolsRegistry[toolName];
+
+      if (!tool) {
+        return res.status(404).json({ error: `Tool not found: ${toolName}` });
+      }
+
+      try {
+        const args = req.method === 'GET' ? coerceParams(req.query as Record<string, any>) : (req.body || {});
+        const result = await tool.handler(args);
+
+        // If tool signals error, set HTTP 400
+        if (result && result.isError) {
+          return res.status(400).json(result);
+        }
+
+        return res.json(result);
+      } catch (error) {
+        const message = error instanceof Error ? error.message : String(error);
+        return res.status(500).json({ error: message });
+      }
+    });
+
+    // REST API root
+    app.get("/api", (req, res) => {
+      res.json({
+        name: "Rohlik MCP REST API",
+        version: "1.0.0",
+        endpoints: {
+          listTools: "/api/tools",
+          executeTool: "/api/tools/:toolName"
+        }
+      });
     });
 
     app.listen(PORT, () => {
